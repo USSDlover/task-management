@@ -24,6 +24,7 @@
       "dom"
     ],
     "paths": {
+      "@shared/*": ["src/app/@shared/*"],
       "@data/*": ["src/app/@data/*"],
       "@core/*": ["src/app/@core/*"],
       "environment": ["src/environments/environment.ts"]

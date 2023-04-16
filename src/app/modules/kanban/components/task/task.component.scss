@@ -1,0 +1,13 @@
+:host {
+  display: block;
+}
+
+.item {
+  cursor: pointer;
+  padding: .75rem;
+
+  p {
+    white-space: pre-line;
+    overflow-wrap: break-word;
+  }
+}
