@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {FormsModule} from '@angular/forms';
 
+import {SharedModule} from '@shared/shared.module';
 import { KanbanRoutingModule } from './kanban-routing.module';
 import { KanbanComponent } from './pages/kanban/kanban.component';
-import {SharedModule} from '@shared/shared.module';
+
 import {TaskComponent} from './components/task/task.component';
-import {FormsModule} from '@angular/forms';
+import { NewTaskComponent } from './components/new-task/new-task.component';
 
 
 @NgModule({
@@ -15,6 +17,7 @@ import {FormsModule} from '@angular/forms';
     KanbanRoutingModule,
     SharedModule,
     FormsModule,
+    NewTaskComponent
   ]
 })
 export class KanbanModule { }

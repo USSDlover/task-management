@@ -5,20 +5,33 @@ export class Task implements Partial<ITask> {
   id?: number;
   order?: number;
   title?: string;
-  userId?: number;
 
   static create(value: ITask): ITask {
     const task = new Task();
     return Object.assign(task, value);
   }
 
-  static dummy(): ITask {
-    return Task.create({
-      completed: (Math.floor(Math.random() * 10)) % 2 === 0,
-      id: new Date().getTime(),
-      order: 0,
-      title: 'Something good' + (new Date().getTime() / 100000),
-      userId: 1
-    });
+  static dummy(withId: boolean): Partial<ITask> {
+    const dummyTask = new Task();
+
+    dummyTask.completed = false;
+    dummyTask.order = 0;
+    dummyTask.title = 'Something good' + (new Date().getTime() / 100000);
+
+    if (withId)
+      dummyTask.id = new Date().getTime();
+
+    return dummyTask;
+  }
+
+  static dummy_2(): ITask {
+    const dummyTask = new Task();
+
+    dummyTask.id = new Date().getTime();
+    dummyTask.completed = (Math.floor(Math.random() * 10)) % 2 === 0;
+    dummyTask.order = 0;
+    dummyTask.title = 'Something good' + (new Date().getTime() / 100000);
+
+    return dummyTask as ITask;
   }
 }

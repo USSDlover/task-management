@@ -16,7 +16,7 @@ export const loadedFailure = createAction(
 
 export const createTask = createAction(
   '[Tasks API] Create Task',
-  props<{ newTask: Omit<ITask, 'id'> }>()
+  props<{ newTaskTitle: string }>()
 )
 
 export const createTaskSuccessful = createAction(

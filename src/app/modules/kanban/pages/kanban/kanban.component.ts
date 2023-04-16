@@ -1,8 +1,11 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
-import {ITask} from '@data/interfaces';
-import {Subscription} from 'rxjs';
-import {Store} from '@ngrx/store';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { ITask } from '@data/interfaces';
+import { Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import * as TasksAction from '@data/store/actions';
+import { MatDialog } from '@angular/material/dialog';
+import { NewTaskComponent } from '../../components/new-task/new-task.component';
 
 @Component({
   selector: 'app-kanban',
@@ -15,7 +18,8 @@ export class KanbanComponent implements OnInit, OnDestroy {
   private tasksSub?: Subscription;
 
   constructor(
-    private store: Store<{ tasks: ITask[] }>
+    private store: Store<{ tasks: ITask[] }>,
+    public dialog: MatDialog
   ) {
   }
 
@@ -27,7 +31,7 @@ export class KanbanComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.getTasks();
-    this.store.dispatch({ type: '[Tasks API] Load Tasks' });
+    this.store.dispatch({ type: TasksAction.load.type });
   }
 
   private getTasks(): void {
@@ -64,6 +68,15 @@ export class KanbanComponent implements OnInit, OnDestroy {
       event.previousIndex,
       event.currentIndex
     );
+  }
+
+  public onAddTask(): void {
+    const newTaskDialogRef = this.dialog.open(NewTaskComponent);
+    newTaskDialogRef.afterClosed()
+      .subscribe(newTaskTitle => {
+        if (!!newTaskTitle)
+          this.store.dispatch({ type: TasksAction.createTask.type, newTaskTitle });
+      });
   }
 
 }

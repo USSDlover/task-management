@@ -2,6 +2,7 @@
   <mat-icon>assignment</mat-icon>
   <span>Task Board</span>
 </mat-toolbar>
+
 <div class="content-wrapper">
   <div class="container-wrapper">
     <div class="container">
@@ -48,5 +49,10 @@
   </div>
 </div>
 
+<button (click)="onAddTask()" class="add-btn" mat-fab>
+  <mat-icon>add</mat-icon>
+</button>
+
 <ng-template #emptyList>
+  There is no item.
 </ng-template>

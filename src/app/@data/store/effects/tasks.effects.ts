@@ -22,8 +22,8 @@ export class TasksEffects {
   create$ = createEffect(() =>
     this.actions$.pipe(
       ofType(TasksAction.createTask),
-      exhaustMap(({ newTask }) => {
-        return this.taskService.createTask(newTask).pipe(
+      exhaustMap(({ newTaskTitle }) => {
+        return this.taskService.createTask(newTaskTitle).pipe(
           map(createdTask => TasksAction.createTaskSuccessful({ createdTask })),
           catchError(error => of(TasksAction.createTaskFailure({ error })))
         )

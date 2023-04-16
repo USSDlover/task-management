@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import { Observable, of } from 'rxjs';
 import {map, tap} from 'rxjs/operators';
 import {ITask} from '@data/interfaces';
+import { Task } from '@data/models/task';
 
 @Injectable()
 export class TasksService {
@@ -12,12 +13,7 @@ export class TasksService {
   }
 
   fetchTasks(): Observable<ITask[]> {
-    return this.http
-      .get<Array<ITask>>
-      ('https://jsonplaceholder.typicode.com/todos')
-      .pipe(
-        tap(res => console.log('Pure Res', res))
-      );
+    return of(Array.from({ length: 5 }, Task.dummy_2));
   }
 
   findTaskById(id: number): Observable<ITask> {
@@ -31,10 +27,14 @@ export class TasksService {
       );
   }
 
-  createTask(newTask: Omit<ITask, 'id'>): Observable<ITask> {
+  createTask(newTaskTitle: string): Observable<ITask> {
     const dumpTask = new Task();
-    Object.assign(dumpTask, newTask);
+
     dumpTask.id = Math.floor(Math.random() * 10000);
+    dumpTask.title = newTaskTitle;
+    dumpTask.completed = false;
+    dumpTask.order = 0;
+
     return of(dumpTask as ITask);
   }
 }
