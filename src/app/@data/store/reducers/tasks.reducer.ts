@@ -10,6 +10,9 @@ const _storeTodoReducer = createReducer(
   initialState,
   on(TaskActions.loaded, (state, action) => {
     return action.tasks;
+  }),
+  on(TaskActions.createTaskSuccessful, (state, { createdTask }) => {
+    return [createdTask];
   })
 );
 

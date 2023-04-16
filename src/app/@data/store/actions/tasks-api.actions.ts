@@ -14,3 +14,17 @@ export const loadedFailure = createAction(
   props<{ error: HttpErrorResponse }>()
 );
 
+export const createTask = createAction(
+  '[Tasks API] Create Task',
+  props<{ newTask: Omit<ITask, 'id'> }>()
+)
+
+export const createTaskSuccessful = createAction(
+  '[Tasks API] Create Task Successful',
+  props<{ createdTask: ITask }>()
+)
+
+export const createTaskFailure = createAction(
+  '[Tasks API] Create Task Successful',
+  props<{ error: HttpErrorResponse }>()
+)

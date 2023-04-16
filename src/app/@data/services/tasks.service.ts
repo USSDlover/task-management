@@ -30,4 +30,11 @@ export class TasksService {
         tap(res => console.log('Parsed', res))
       );
   }
+
+  createTask(newTask: Omit<ITask, 'id'>): Observable<ITask> {
+    const dumpTask = new Task();
+    Object.assign(dumpTask, newTask);
+    dumpTask.id = Math.floor(Math.random() * 10000);
+    return of(dumpTask as ITask);
+  }
 }
