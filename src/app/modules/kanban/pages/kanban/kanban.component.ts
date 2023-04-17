@@ -71,13 +71,6 @@ export class KanbanComponent implements OnInit, OnDestroy {
       changes: { completed: event.container.id === 'done' }
     }
     this.store.dispatch(TasksAction.updateTask({ update: taskUpdate }));
-
-    /*transferArrayItem<ITask>(
-      event.previousContainer.data,
-      event.container.data,
-      event.previousIndex,
-      event.currentIndex
-    );*/
   }
 
   public onAddTask(): void {
