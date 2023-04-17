@@ -10,4 +10,14 @@ export const selectTaskState = createFeatureSelector<fromTasks.TasksState>('task
 export const selectAllTasks = createSelector(
   selectTaskState,
   fromTasks.selectAllTasks
-)
+);
+
+export const selectAllTodo = createSelector(
+  selectAllTasks,
+  tasks => tasks.filter(task => (!task.completed))
+);
+
+export const selectAllDone = createSelector(
+  selectAllTasks,
+  tasks => tasks.filter(task => (task.completed))
+);

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ITask } from '@data/interfaces';
 import { Subscription } from 'rxjs';
 import { select, Store } from '@ngrx/store';
@@ -7,7 +7,7 @@ import * as TasksAction from '@data/store/actions';
 import { MatDialog } from '@angular/material/dialog';
 import { NewTaskComponent } from '../../components/new-task/new-task.component';
 import { Update } from '@ngrx/entity';
-import { selectAllTasks, State } from '@data/store';
+import { selectAllDone, selectAllTodo, State } from '@data/store';
 
 @Component({
   selector: 'app-kanban',
@@ -17,7 +17,7 @@ import { selectAllTasks, State } from '@data/store';
 export class KanbanComponent implements OnInit, OnDestroy {
   public todo: ITask[] = [];
   public done: ITask[] = [];
-  private tasksSub?: Subscription;
+  private tasksSub = new Subscription();
 
   constructor(
     private store: Store<State>,
@@ -37,19 +37,22 @@ export class KanbanComponent implements OnInit, OnDestroy {
   }
 
   private getTasks(): void {
-    this.tasksSub = this.store
-      .pipe(select(selectAllTasks))
-      .subscribe(tasks => {
-        if (tasks.length > 0) {
-          for (const task of tasks) {
-            if (task.completed) {
-              this.done.push(task);
-            } else {
-              this.todo.push(task);
-            }
-          }
-        }
-      });
+    this.tasksSub.add(
+      this.store
+        .pipe(select(selectAllTodo))
+        .subscribe(tasks => {
+          this.todo.length = 0;
+          this.todo.push(...tasks)
+        })
+    );
+    this.tasksSub.add(
+      this.store
+        .pipe(select(selectAllDone))
+        .subscribe(tasks => {
+          this.done.length = 0;
+          this.done.push(...tasks)
+        })
+    )
   }
 
   public drop(event: CdkDragDrop<ITask[]>): void {
@@ -67,14 +70,14 @@ export class KanbanComponent implements OnInit, OnDestroy {
       id: item.id,
       changes: { completed: event.container.id === 'done' }
     }
-    this.store.dispatch(TasksAction.updateTask({ update: taskUpdate }))
+    this.store.dispatch(TasksAction.updateTask({ update: taskUpdate }));
 
-    transferArrayItem<ITask>(
+    /*transferArrayItem<ITask>(
       event.previousContainer.data,
       event.container.data,
       event.previousIndex,
       event.currentIndex
-    );
+    );*/
   }
 
   public onAddTask(): void {
