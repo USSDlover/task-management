@@ -1,6 +1,7 @@
 import {createAction, props} from '@ngrx/store';
 import {ITask} from '@data/interfaces';
 import {HttpErrorResponse} from '@angular/common/http';
+import { Update } from '@ngrx/entity';
 
 export const load = createAction('[Tasks API] Load Tasks');
 
@@ -17,14 +18,19 @@ export const loadedFailure = createAction(
 export const createTask = createAction(
   '[Tasks API] Create Task',
   props<{ newTaskTitle: string }>()
-)
+);
 
 export const createTaskSuccessful = createAction(
   '[Tasks API] Create Task Successful',
   props<{ createdTask: ITask }>()
-)
+);
 
 export const createTaskFailure = createAction(
   '[Tasks API] Create Task Successful',
   props<{ error: HttpErrorResponse }>()
+);
+
+export const updateTask = createAction(
+  '[Task API] Update Task',
+  props<{ update: Update<ITask> }>()
 )

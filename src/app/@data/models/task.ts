@@ -2,7 +2,7 @@ import {ITask} from '@data/interfaces';
 
 export class Task implements Partial<ITask> {
   completed?: boolean;
-  id?: number;
+  id?: string;
   order?: number;
   title?: string;
 
@@ -19,7 +19,7 @@ export class Task implements Partial<ITask> {
     dummyTask.title = 'Something good' + (new Date().getTime() / 100000);
 
     if (withId)
-      dummyTask.id = new Date().getTime();
+      dummyTask.id = crypto.randomUUID();
 
     return dummyTask;
   }
@@ -27,10 +27,10 @@ export class Task implements Partial<ITask> {
   static dummy_2(): ITask {
     const dummyTask = new Task();
 
-    dummyTask.id = new Date().getTime();
+    dummyTask.id = crypto.randomUUID();
     dummyTask.completed = (Math.floor(Math.random() * 10)) % 2 === 0;
     dummyTask.order = 0;
-    dummyTask.title = 'Something good' + (new Date().getTime() / 100000);
+    dummyTask.title = 'Item - ' + Math.floor(Math.random() * 1000).toString();
 
     return dummyTask as ITask;
   }

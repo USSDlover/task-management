@@ -2,10 +2,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { ITask } from '@data/interfaces';
 import { Subscription } from 'rxjs';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import * as TasksAction from '@data/store/actions';
 import { MatDialog } from '@angular/material/dialog';
 import { NewTaskComponent } from '../../components/new-task/new-task.component';
+import { Update } from '@ngrx/entity';
+import { selectAllTasks, State } from '@data/store';
 
 @Component({
   selector: 'app-kanban',
@@ -18,7 +20,7 @@ export class KanbanComponent implements OnInit, OnDestroy {
   private tasksSub?: Subscription;
 
   constructor(
-    private store: Store<{ tasks: ITask[] }>,
+    private store: Store<State>,
     public dialog: MatDialog
   ) {
   }
@@ -36,9 +38,7 @@ export class KanbanComponent implements OnInit, OnDestroy {
 
   private getTasks(): void {
     this.tasksSub = this.store
-      .select(state => {
-        return state.tasks;
-      })
+      .pipe(select(selectAllTasks))
       .subscribe(tasks => {
         if (tasks.length > 0) {
           for (const task of tasks) {
@@ -61,7 +61,14 @@ export class KanbanComponent implements OnInit, OnDestroy {
       );
       return;
     }
-    // const item = event.previousContainer.data[event.previousIndex];
+
+    const item = event.previousContainer.data[event.previousIndex];
+    const taskUpdate: Update<ITask> = {
+      id: item.id,
+      changes: { completed: event.container.id === 'done' }
+    }
+    this.store.dispatch(TasksAction.updateTask({ update: taskUpdate }))
+
     transferArrayItem<ITask>(
       event.previousContainer.data,
       event.container.data,

@@ -13,7 +13,7 @@ export class TasksService {
   }
 
   fetchTasks(): Observable<ITask[]> {
-    return of(Array.from({ length: 5 }, Task.dummy_2));
+    return of(Array.from({ length: 2 }, Task.dummy_2));
   }
 
   findTaskById(id: number): Observable<ITask> {
@@ -30,7 +30,7 @@ export class TasksService {
   createTask(newTaskTitle: string): Observable<ITask> {
     const dumpTask = new Task();
 
-    dumpTask.id = Math.floor(Math.random() * 10000);
+    dumpTask.id = crypto.randomUUID();
     dumpTask.title = newTaskTitle;
     dumpTask.completed = false;
     dumpTask.order = 0;
